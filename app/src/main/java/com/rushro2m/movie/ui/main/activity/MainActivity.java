@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
+        switchPage(HomeFragment.TAG);
 
     }
 

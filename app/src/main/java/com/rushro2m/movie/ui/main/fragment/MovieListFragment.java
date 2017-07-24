@@ -31,9 +31,10 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
 
     @BindView(R.id.refresh_fragment_movie_list)
     RefreshLayout refreshLayout;
-    public static  int PAGE = 1;
-    public static  int SIZE = 10;
+    public int page = 1;
+    public int size = 10;
     private List<MovieList.MovieData> mData;
+    private List<MovieList.MovieData> allData;
 
     @Override
     protected int getLayoutId() {
@@ -43,14 +44,14 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
     @Override
     protected void initPresenter() {
         mPresenter.setVM(this, mModel);
-        mPresenter.getNewMovieList(PAGE, SIZE);
+        mPresenter.getNewMovieList(page, size);
     }
 
     @Override
     public void initView() {
         images = new ArrayList<>();
-        mData = new ArrayList<>();
-        movieListAdapter = new MovieListAdapter(null,getActivity());
+        allData = new ArrayList<>();
+        movieListAdapter = new MovieListAdapter(null, getActivity());
         recycler_movie_list.setAdapter(movieListAdapter);
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setOnLoadmoreListener(this);
@@ -73,22 +74,30 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
 
     @Override
     public void returnNewMovieList(MovieList movieList) {
-       mData=movieList.getData();
+        mData = movieList.getData();
+        if (movieListAdapter.isLoadMore()) {
+            movieListAdapter.setLoadMore(false);
+            movieListAdapter.updataRes(movieList.getData());
+        } else {
+//            allData.addAll(mData);
+//            movieListAdapter.loadMore(allData);
+            movieListAdapter.loadMore(mData);
+        }
     }
 
     @Override
     public void onRefresh(RefreshLayout refreshlayout) {
-        PAGE = 1;
-        mPresenter.getNewMovieList(PAGE,SIZE);
+        page = 1;
+        mPresenter.getNewMovieList(page, size);
         movieListAdapter.updataRes(mData);
-        refreshlayout.finishRefresh(2*1000);
+        refreshlayout.finishRefresh(2 * 1000);
     }
 
     @Override
     public void onLoadmore(RefreshLayout refreshlayout) {
-        PAGE++;
-        mPresenter.getNewMovieList(PAGE,SIZE);
-        movieListAdapter.loadMore(mData);
+        movieListAdapter.setLoadMore(true);
+        mPresenter.getNewMovieList(++page, size);
+//        movieListAdapter.loadMore(mData);
         refreshLayout.finishLoadmore(2000);
     }
 }

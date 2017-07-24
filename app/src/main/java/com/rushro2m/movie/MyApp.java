@@ -19,6 +19,9 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
  */
 
 public class MyApp extends Application {
+
+    static Context mContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -36,5 +39,11 @@ public class MyApp extends Application {
                 return new ClassicsFooter(context).setSpinnerStyle(SpinnerStyle.Translate);
             }
         });
+        mContext = this;
+    }
+
+
+    public static Context getContext() {
+        return mContext;
     }
 }

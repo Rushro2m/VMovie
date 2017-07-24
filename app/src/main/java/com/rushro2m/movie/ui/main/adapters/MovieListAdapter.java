@@ -31,6 +31,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     private LayoutInflater inflater;
     private RecyclerView mRecyclerView;
 
+    private boolean loadMore;
+
+    public void setLoadMore(boolean loadMore) {
+        this.loadMore = loadMore;
+    }
+
+    public boolean isLoadMore() {
+        return loadMore;
+    }
+
     public MovieListAdapter(List<MovieList.MovieData> mData, Context mContext) {
         if (mData != null) {
             this.mData = mData;
