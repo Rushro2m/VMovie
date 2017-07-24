@@ -18,9 +18,6 @@ import java.util.List;
 
 import butterknife.BindView;
 
-/**
- * Created by Administrator on 2017/7/21.
- */
 
 public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieListModel> implements MovieListContract.View, OnRefreshListener, OnLoadmoreListener {
 
@@ -31,10 +28,9 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
 
     @BindView(R.id.refresh_fragment_movie_list)
     RefreshLayout refreshLayout;
-    public int page = 1;
-    public int size = 10;
+    public  int page = 1;
+    public  int size = 10;
     private List<MovieList.MovieData> mData;
-    private List<MovieList.MovieData> allData;
 
     @Override
     protected int getLayoutId() {
@@ -50,7 +46,6 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
     @Override
     public void initView() {
         images = new ArrayList<>();
-        allData = new ArrayList<>();
         movieListAdapter = new MovieListAdapter(null, getActivity());
         recycler_movie_list.setAdapter(movieListAdapter);
         refreshLayout.setOnRefreshListener(this);
@@ -78,10 +73,8 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
         if (movieListAdapter.isLoadMore()) {
             movieListAdapter.setLoadMore(false);
             movieListAdapter.updataRes(movieList.getData());
-        } else {
-//            allData.addAll(mData);
-//            movieListAdapter.loadMore(allData);
-            movieListAdapter.loadMore(mData);
+        }else {
+            movieListAdapter.updataRes(movieList.getData());
         }
     }
 
@@ -97,7 +90,6 @@ public class MovieListFragment extends BaseFragment<MovieListPresenter, MovieLis
     public void onLoadmore(RefreshLayout refreshlayout) {
         movieListAdapter.setLoadMore(true);
         mPresenter.getNewMovieList(++page, size);
-//        movieListAdapter.loadMore(mData);
         refreshLayout.finishLoadmore(2000);
     }
 }
